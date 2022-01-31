@@ -4,8 +4,12 @@ import { EntryInput } from './EntryInput';
 import { createStyles, makeStyles } from '@mui/styles';
 import { MessageLeft, MessageRight } from './MessageView';
 export interface IMessage {
-  name: string;
-  message: string[];
+  username: string;
+  message: ILogMessage[];
+}
+export interface ILogMessage {
+  text: string;
+  date: string;
 }
 
 const useStyles = makeStyles((theme) =>
@@ -44,13 +48,12 @@ const useStyles = makeStyles((theme) =>
 
 const ChatRoom: React.FC = (): JSX.Element => {
   const classes = useStyles();
-  const [message, setMessage] = React.useState<IMessage[]>([]);
+  const [messages, setMessages] = React.useState<ILogMessage>();
 
-  React.useEffect(() => {
-    if (message) {
-      console.log(message);
-    }
-  }, [message]);
+  const addMessage = (msg: ILogMessage) => {
+    setMessages(msg);
+  };
+  React.useEffect(() => {}, [messages]);
 
   return (
     <div className={classes.container}>
@@ -59,7 +62,7 @@ const ChatRoom: React.FC = (): JSX.Element => {
           <MessageRight message='Test' timestamp='22/10' />
           <MessageLeft message='Test' timestamp='22/10' />
         </Paper>
-        <EntryInput />
+        <EntryInput addMessage={addMessage} />
       </Paper>
     </div>
   );

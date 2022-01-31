@@ -1,11 +1,12 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Container, Paper } from '@mui/material';
 import './App.css';
 import socket from '../src/components/Services/Socket';
 import ChatRoom from './components/Chatroom';
+import { Socket } from 'socket.io-client';
 
 function App() {
-  React.useEffect(() => {
+  useEffect(() => {
     socket.emit('connection', (data: any) => {
       console.log('jointed');
     });

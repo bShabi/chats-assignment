@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { createStyles, makeStyles } from '@mui/styles';
 import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
+import { ILogMessage } from '.';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -19,18 +20,46 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-export const EntryInput: React.FC = (): JSX.Element => {
+interface Props {
+  addMessage: (msg: ILogMessage) => void;
+}
+export const EntryInput: React.FC<Props> = ({ addMessage }): JSX.Element => {
   const classes = useStyles();
+  const [message, setMessage] = useState<ILogMessage>();
+
+  // const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const entry = e.currentTarget.value;
+  //   console.log(entry);
+  // };
+
   return (
     <>
-      <form className={classes.wrapForm} noValidate autoComplete='off'>
+      <form
+        className={classes.wrapForm}
+        autoComplete='off'
+        onSubmit={(e: React.SyntheticEvent) => {
+          e.preventDefault();
+          const target = e.target as typeof e.target & {
+            message: { value: string };
+          };
+          const prepperMessage: ILogMessage = {
+            text: target.message.value,
+            date: String(new Date()),
+          };
+          addMessage(prepperMessage);
+        }}>
         <TextField
           id='standard-text'
           label='Message'
+          name='message'
           className={classes.wrapText}
           //margin="normal"
         />
-        <Button variant='contained' color='primary' className={classes.button}>
+        <Button
+          variant='contained'
+          color='primary'
+          className={classes.button}
+          type='submit'>
           <SendIcon />
         </Button>
       </form>
