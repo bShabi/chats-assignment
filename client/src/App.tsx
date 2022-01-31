@@ -2,51 +2,72 @@ import { useState, useEffect, useRef } from 'react';
 import { Container, Paper } from '@mui/material';
 import './App.css';
 import ChatRoom from './components/Chatroom';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { Endpoint } from './config/index';
 
 interface IUsername {
   id: string;
   username: string;
 }
+export interface ServerToClientEvents {
+  noArg: () => void;
+  allMessages: (messages: string[]) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+}
+
+export interface ClientToServerEvents {
+  addMessage: (message: string) => void;
+}
 function App() {
   const [connectionUsers, setConnectionUsers] = useState<IUsername[]>([]);
-  const socketRef: any = useRef(null);
+  const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+    'http://localhost:3005'
+  );
 
   useEffect(() => {
-    console.log('socketRef', socketRef);
-    if (socketRef.current == null) {
-      socketRef.current = io('http://localhost:3005');
-    }
-    console.log('socketRef2', socketRef);
+    socket.on('connect', () => {
+      console.log('first');
+      // ...
+    });
+    socket.on('allMessages', (messages: string[]) => {
+      console.log('all messages', messages);
+    });
+  });
 
-    const { current: socket } = socketRef;
+  // useEffect(() => {
+  //   console.log('socketRef', socket);
+  //   if (socket == null) {
+  //     socketRef = io('http://localhost:3005');
+  //   }
+  //   console.log('socketRef2', socketRef);
 
-    try {
-      socket.open();
-      socket.emit('connection');
+  //   const { current: socket } = socketRef;
 
-      socket.on('sendMsg', (data: any) => {
-        console.log('data');
-        // we get settings data and can do something with it
-      });
-      socket.on('getMsg', (data: any) => {
-        console.log('data');
-        // we get settings data and can do something with it
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    // Return a callback to be run before unmount-ing.
-    return () => {
-      socket.close();
-    };
-  }, []); // Pass in an empty array to only run on mount.
+  //   try {
+  //     socket.open();
+  //     socket.emit('connection');
+
+  //     socket.on('sendMsg', (data: any) => {
+  //       console.log('data');
+  //       // we get settings data and can do something with it
+  //     });
+  //     socket.on('getMsg', (data: any) => {
+  //       console.log('data');
+  //       // we get settings data and can do something with it
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   // Return a callback to be run before unmount-ing.
+  //   return () => {
+  //     socket.close();
+  //   };
+  // }, []); // Pass in an empty array to only run on mount.
 
   return (
     <Container>
       <h1>Chat</h1>
-      <ChatRoom socketRef={socketRef} />
+      <ChatRoom socketRef={socket} />
     </Container>
   );
 }

@@ -21,11 +21,11 @@ const useStyles = makeStyles(() =>
   })
 );
 interface Props {
-  addMessage: (msg: ILogMessage) => void;
+  addMessage: (msg: string) => void;
 }
 export const EntryInput: React.FC<Props> = ({ addMessage }): JSX.Element => {
   const classes = useStyles();
-  const [message, setMessage] = useState<ILogMessage>();
+  const [message, setMessage] = useState<string>();
 
   // const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const entry = e.currentTarget.value;
@@ -42,11 +42,7 @@ export const EntryInput: React.FC<Props> = ({ addMessage }): JSX.Element => {
           const target = e.target as typeof e.target & {
             message: { value: string };
           };
-          const prepperMessage: ILogMessage = {
-            text: target.message.value,
-            date: String(new Date()),
-          };
-          addMessage(prepperMessage);
+          addMessage(target.message.value);
         }}>
         <TextField
           id='standard-text'

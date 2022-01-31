@@ -3,6 +3,9 @@ import * as React from 'react';
 import { EntryInput } from './EntryInput';
 import { createStyles, makeStyles } from '@mui/styles';
 import { MessageLeft, MessageRight } from './MessageView';
+import { ServerToClientEvents, ClientToServerEvents } from '../../App';
+import { io, Socket } from 'socket.io-client';
+
 import { toast, ToastContainer } from 'react-toastify';
 
 export interface IMessage {
@@ -14,7 +17,7 @@ export interface ILogMessage {
   date: string;
 }
 interface Props {
-  socketRef: any;
+  socketRef: Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -52,17 +55,15 @@ const useStyles = makeStyles((theme) =>
 
 const ChatRoom: React.FC<Props> = ({ socketRef }): JSX.Element => {
   const classes = useStyles();
-  const [messages, setMessages] = React.useState<ILogMessage>();
+  const [messages, setMessages] = React.useState<string>();
 
-  const addMessage = (msg: ILogMessage) => {
+  const addMessage = (msg: string) => {
+    socketRef.emit('addMessage', msg);
     setMessages(msg);
     console.log(msg);
     // console.log('socketRef3', socketRef);
 
     toast.success('Send message');
-    socketRef.emit('sendMessage', (messages: ILogMessage) => {
-      console.log(messages);
-    });
   };
 
   return (
