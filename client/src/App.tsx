@@ -1,12 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import socket from '../src/components/Services/Socket';
 
 function App() {
-  return (
-    <div className="App">
-    </div>
-  );
+  React.useEffect(() => {
+    socket.emit('join', (data: any) => {
+      console.log('jointed');
+    });
+  }, []);
+
+  return <div>Heloo wolrd</div>;
 }
 
 export default App;
