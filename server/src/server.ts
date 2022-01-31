@@ -6,18 +6,22 @@ import { userJoin, userLeft, getUsers } from './util/users';
 const app = express();
 
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+const socket = new Server(server, { cors: { origin: '*' } });
 
-io.on('connection', (socket) => {
-  console.log('first');
+socket.on('connection', (socket) => {
+  console.log('socket', socket.id);
+  console.log('All users', getUsers());
   socket.join('myChat');
+  // socket.on('sendMessage', (username: string) => {
+  //   console.log('username', username);
+  // });
 
   socket.on('handle-connection', (username: string) => {
     if (!userJoin(socket.id, username)) {
       socket.emit('username-taken');
     } else {
       socket.emit('username-submitted-successfully');
-      io.to('myChat').emit('get-connected-users', getUsers());
+      socket.to('myChat').emit('get-connected-users', getUsers());
     }
   });
 

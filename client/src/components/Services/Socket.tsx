@@ -1,11 +1,22 @@
 import { io } from 'socket.io-client';
-import { API_URL } from '../../config/index';
-const Endpoint = API_URL;
+// import { Endpoint } from '../../config/index';
 
-const socket = io(Endpoint, {
-  withCredentials: true,
-  extraHeaders: {
-    'my-custom-header': 'abcd',
-  },
-});
-export default socket;
+// const Endpoint = Endpoint;
+// const socket = io(Endpoint);
+
+// export default socket;
+
+// // export default class SocketService {
+// //   public socket;
+// //   constructor() {
+// //     this.socket = socket;
+// //     console.log('hi');
+// //   }
+
+// //   connection() {
+// //     console.log('connection');
+// //     socket.emit('connection', () => {
+// //       console.log('jointed');
+// //     });
+// //   }
+// // }

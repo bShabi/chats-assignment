@@ -3,6 +3,8 @@ import * as React from 'react';
 import { EntryInput } from './EntryInput';
 import { createStyles, makeStyles } from '@mui/styles';
 import { MessageLeft, MessageRight } from './MessageView';
+import { toast, ToastContainer } from 'react-toastify';
+
 export interface IMessage {
   username: string;
   message: ILogMessage[];
@@ -11,7 +13,9 @@ export interface ILogMessage {
   text: string;
   date: string;
 }
-
+interface Props {
+  socketRef: any;
+}
 const useStyles = makeStyles((theme) =>
   createStyles({
     paper: {
@@ -46,14 +50,20 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const ChatRoom: React.FC = (): JSX.Element => {
+const ChatRoom: React.FC<Props> = ({ socketRef }): JSX.Element => {
   const classes = useStyles();
   const [messages, setMessages] = React.useState<ILogMessage>();
 
   const addMessage = (msg: ILogMessage) => {
     setMessages(msg);
+    console.log(msg);
+    // console.log('socketRef3', socketRef);
+
+    toast.success('Send message');
+    socketRef.emit('sendMessage', (messages: ILogMessage) => {
+      console.log(messages);
+    });
   };
-  React.useEffect(() => {}, [messages]);
 
   return (
     <div className={classes.container}>
@@ -64,6 +74,7 @@ const ChatRoom: React.FC = (): JSX.Element => {
         </Paper>
         <EntryInput addMessage={addMessage} />
       </Paper>
+      <ToastContainer position='bottom-right' />
     </div>
   );
 };
