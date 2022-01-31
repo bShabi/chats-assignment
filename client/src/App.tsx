@@ -6,7 +6,7 @@ import ChatRoom from './components/Chatroom';
 
 function App() {
   React.useEffect(() => {
-    socket.emit('join', (data: any) => {
+    socket.emit('connection', (data: any) => {
       console.log('jointed');
     });
   }, []);

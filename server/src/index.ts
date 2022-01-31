@@ -1,20 +1,44 @@
-import * as express from 'express';
-import * as http from 'http';
-import * as socketio from 'socket.io';
+import express from 'express';
+import socket, { Server } from 'socket.io';
+import http from 'http';
 
-const app = express.default();
-
-app.get('/', (_req, res) => {
-  res.send({ uptime: process.uptime() });
-});
-
+const app = express();
 const server = http.createServer(app);
-const io = new socketio.Server(server);
+const io = new Server(server);
 
-io.on('join', (...params) => {
-  console.log('params');
+app.use(express.static(__dirname + '/../public'));
+
+const PORT = process.env.PORT || 8888;
+
+app.get('/teste', (req, res) => {
+  const msg = req.query.msg?.toString() || '';
+
+  for (const client of clients) {
+    client.emit('msg', msg);
+  }
+
+  res.json({
+    ok: true,
+    msg,
+  });
 });
 
-server.listen(4004, () => {
-  console.log('Running at localhost:4004');
+const httpServer = http.createServer(app);
+
+const clients: Array<any> = [];
+
+io.on('connection', (client: socket.Socket) => {
+  client.on('join', (params: string) => {
+    clients.push(client);
+    console.log(`Joined: ${client.id} ${params}`);
+  });
+
+  client.on('disconnect', () => {
+    clients.splice(clients.indexOf(client), 1);
+    console.log(`Disconnected: ${client.id}`);
+  });
+});
+
+httpServer.listen(PORT, () => {
+  console.log('Server http started at ' + PORT);
 });
