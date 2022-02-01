@@ -25,13 +25,11 @@ interface Props {
 }
 export const EntryInput: React.FC<Props> = ({ addMessage }): JSX.Element => {
   const classes = useStyles();
-  const [message, setMessage] = useState<string>();
+  const [message, setMessage] = useState<string>('');
 
-  // const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const entry = e.currentTarget.value;
-  //   console.log(entry);
-  // };
-
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.currentTarget.value);
+  };
   return (
     <>
       <form
@@ -43,18 +41,20 @@ export const EntryInput: React.FC<Props> = ({ addMessage }): JSX.Element => {
             message: { value: string };
           };
           addMessage(target.message.value);
+          setMessage('');
         }}>
         <TextField
+          className={classes.wrapText}
           id='standard-text'
           label='Message'
           name='message'
-          className={classes.wrapText}
-          //margin="normal"
+          value={message}
+          onChange={changeHandler}
         />
         <Button
+          className={classes.button}
           variant='contained'
           color='primary'
-          className={classes.button}
           type='submit'>
           <SendIcon />
         </Button>

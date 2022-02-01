@@ -3,8 +3,8 @@ import React from 'react';
 import { createStyles, makeStyles } from '@mui/styles';
 interface Props {
   message: string;
-  timestamp: string;
-  displayName?: string;
+  // timestamp: string;
+  // displayName?: string;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -116,37 +116,33 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const MessageLeft: React.FC<Props> = (props) => {
+const MessageView: React.FC<Props> = (props) => {
   const message = props.message ? props.message : 'no message';
-  const timestamp = props.timestamp ? props.timestamp : '';
-  const displayName = props.displayName ? props.displayName : 'noName';
   const classes = useStyles();
   return (
     <>
       <div className={classes.messageRow}>
         <div>
-          {/* <div className={classes.displayName}>{displayName}</div> */}
           <div className={classes.messageBlue}>
             <div>
               <p className={classes.messageContent}>{message}</p>
             </div>
-            <div className={classes.messageTimeStampRight}>{timestamp}</div>
           </div>
         </div>
       </div>
     </>
   );
 };
-export const MessageRight: React.FC<Props> = (props: Props) => {
-  const classes = useStyles();
-  const message = props.message ? props.message : 'no message';
-  const timestamp = props.timestamp ? props.timestamp : '';
-  return (
-    <div className={classes.messageRowRight}>
-      <div className={classes.messageOrange}>
-        <p className={classes.messageContent}>{message}</p>
-        <div className={classes.messageTimeStampRight}>{timestamp}</div>
-      </div>
-    </div>
-  );
-};
+// const MessageView: React.FC<Props> = (props: Props) => {
+//   const classes = useStyles();
+//   const message = props.message ? props.message : 'no message';
+
+//   return (
+//     <div className={classes.messageRowRight}>
+//       <div className={classes.messageOrange}>
+//         <p className={classes.messageContent}>{message}</p>
+//       </div>
+//     </div>
+//   );
+// };
+export default MessageView;

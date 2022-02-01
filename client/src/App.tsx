@@ -19,9 +19,8 @@ export interface ClientToServerEvents {
   addMessage: (message: string) => void;
 }
 function App() {
-  const [connectionUsers, setConnectionUsers] = useState<IUsername[]>([]);
   const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-    'http://localhost:3005'
+    'http://192.168.1.15:3005'
   );
 
   useEffect(() => {
@@ -29,9 +28,9 @@ function App() {
       console.log('first');
       // ...
     });
-    socket.on('allMessages', (messages: string[]) => {
-      console.log('all messages', messages);
-    });
+    return () => {
+      socket.close();
+    };
   });
 
   // useEffect(() => {

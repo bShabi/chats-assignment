@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 import * as React from 'react';
 import { EntryInput } from './EntryInput';
 import { createStyles, makeStyles } from '@mui/styles';
-import { MessageLeft, MessageRight } from './MessageView';
+import MessageView from './MessageView';
 import { ServerToClientEvents, ClientToServerEvents } from '../../App';
 import { io, Socket } from 'socket.io-client';
 
@@ -13,11 +13,11 @@ export interface IMessage {
   message: ILogMessage[];
 }
 export interface ILogMessage {
-  text: string;
-  date: string;
+  message: string;
 }
 interface Props {
   socketRef: Socket<ServerToClientEvents, ClientToServerEvents>;
+  // allMessages?: string[] | undefined;
 }
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -55,23 +55,29 @@ const useStyles = makeStyles((theme) =>
 
 const ChatRoom: React.FC<Props> = ({ socketRef }): JSX.Element => {
   const classes = useStyles();
-  const [messages, setMessages] = React.useState<string>();
+  const [messages, setMessages] = React.useState<string[]>([]);
 
   const addMessage = (msg: string) => {
     socketRef.emit('addMessage', msg);
-    setMessages(msg);
-    console.log(msg);
-    // console.log('socketRef3', socketRef);
-
+    if (!msg) return;
+    setMessages((oldArray) => [...oldArray, msg]);
     toast.success('Send message');
   };
-
+  React.useEffect(() => {
+    socketRef.on('allMessages', (messages: string[]) => {
+      console.log('all messages', messages);
+      setMessages(messages);
+      toast.info('New Message');
+    });
+  }, []);
   return (
     <div className={classes.container}>
       <Paper className={classes.paper}>
         <Paper id='style-1' className={classes.messagesBody}>
-          <MessageRight message='Test' timestamp='22/10' />
-          <MessageLeft message='Test' timestamp='22/10' />
+          {messages.map((message: string, id: number) => {
+            return <MessageView key={id} message={message} />;
+            // return <MessageView key={id} message={message} />;
+          })}
         </Paper>
         <EntryInput addMessage={addMessage} />
       </Paper>

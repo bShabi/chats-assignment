@@ -1,0 +1,24 @@
+{
+  "name": "chat-assignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:install": "concurrently \"cd client && npm install\"  \"cd server && npm install\"",
+    "start": "concurrently \"cd client && npm run start\"  \"cd server && npm run dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bShabi/chats-assignment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bShabi/chats-assignment/issues"
+  },
+  "homepage": "https://github.com/bShabi/chats-assignment#readme",
+  "dependencies": {
+    "concurrently": "^7.0.0"
+  }
+}

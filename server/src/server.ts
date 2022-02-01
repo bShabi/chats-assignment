@@ -23,7 +23,7 @@ socket.on('connection', (socket) => {
   socket.emit('allMessages', getAllMessages());
   socket.on('addMessage', (message) => {
     addMessage(message);
-    socket.emit('allMessages', getAllMessages());
+    socket.broadcast.emit('allMessages', getAllMessages());
   });
 });
 
