@@ -1,7 +1,7 @@
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { userJoin, userLeft, getUsers } from './util/users';
+// import { userJoin, userLeft, getUsers } from './util/users';
 import { addMessage, getAllMessages } from './util/messages';
 
 interface ServerToClientEvents {

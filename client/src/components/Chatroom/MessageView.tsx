@@ -1,4 +1,4 @@
-import { Paper, Theme } from '@mui/material';
+import { Theme } from '@mui/material';
 import React from 'react';
 import { createStyles, makeStyles } from '@mui/styles';
 interface Props {
@@ -12,10 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
     messageRow: {
       display: 'flex',
     },
-    messageRowRight: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-    },
     messageBlue: {
       position: 'relative',
       marginLeft: '20px',
@@ -23,7 +19,6 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: '10px',
       backgroundColor: '#A8DDFD',
       width: '60%',
-      //height: "50px",
       textAlign: 'left',
       font: "400 .9em 'Open Sans', sans-serif",
       border: '1px solid #97C6E3',
@@ -51,41 +46,6 @@ const useStyles = makeStyles((theme: Theme) =>
         left: '-17px',
       },
     },
-    messageOrange: {
-      position: 'relative',
-      marginRight: '20px',
-      marginBottom: '10px',
-      padding: '10px',
-      backgroundColor: '#f8e896',
-      width: '60%',
-      //height: "50px",
-      textAlign: 'left',
-      font: "400 .9em 'Open Sans', sans-serif",
-      border: '1px solid #dfd087',
-      borderRadius: '10px',
-      '&:after': {
-        content: "''",
-        position: 'absolute',
-        width: '0',
-        height: '0',
-        borderTop: '15px solid #f8e896',
-        borderLeft: '15px solid transparent',
-        borderRight: '15px solid transparent',
-        top: '0',
-        right: '-15px',
-      },
-      '&:before': {
-        content: "''",
-        position: 'absolute',
-        width: '0',
-        height: '0',
-        borderTop: '17px solid #dfd087',
-        borderLeft: '16px solid transparent',
-        borderRight: '16px solid transparent',
-        top: '-1px',
-        right: '-17px',
-      },
-    },
 
     messageContent: {
       padding: 0,
@@ -104,12 +64,6 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 10,
       height: 20,
     },
-    avatarNothing: {
-      color: 'transparent',
-      backgroundColor: 'transparent',
-      width: 20,
-      height: 20,
-    },
     displayName: {
       marginLeft: '20px',
     },
@@ -117,7 +71,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const MessageView: React.FC<Props> = (props) => {
-  const message = props.message ? props.message : 'no message';
+  const message: string = props.message;
   const classes = useStyles();
   return (
     <>
@@ -133,16 +87,4 @@ const MessageView: React.FC<Props> = (props) => {
     </>
   );
 };
-// const MessageView: React.FC<Props> = (props: Props) => {
-//   const classes = useStyles();
-//   const message = props.message ? props.message : 'no message';
-
-//   return (
-//     <div className={classes.messageRowRight}>
-//       <div className={classes.messageOrange}>
-//         <p className={classes.messageContent}>{message}</p>
-//       </div>
-//     </div>
-//   );
-// };
 export default MessageView;

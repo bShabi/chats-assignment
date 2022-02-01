@@ -1,14 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
-import { Container, Paper } from '@mui/material';
+import { useEffect } from 'react';
+import { Container } from '@mui/material';
 import './App.css';
 import ChatRoom from './components/Chatroom';
 import { io, Socket } from 'socket.io-client';
-import { Endpoint } from './config/index';
+import { Endpoint } from './config';
 
-interface IUsername {
-  id: string;
-  username: string;
-}
 export interface ServerToClientEvents {
   noArg: () => void;
   allMessages: (messages: string[]) => void;
@@ -19,49 +15,20 @@ export interface ClientToServerEvents {
   addMessage: (message: string) => void;
 }
 function App() {
-  const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-    'http://192.168.1.15:3005'
-  );
+  const socket: Socket<ServerToClientEvents, ClientToServerEvents> =
+    io(Endpoint);
 
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('first');
-      // ...
-    });
+    try {
+      socket.on('connect', () => {});
+    } catch (error) {
+      console.log(error);
+    }
+    // Return a callback to be run before unmount-ing.
     return () => {
       socket.close();
     };
   });
-
-  // useEffect(() => {
-  //   console.log('socketRef', socket);
-  //   if (socket == null) {
-  //     socketRef = io('http://localhost:3005');
-  //   }
-  //   console.log('socketRef2', socketRef);
-
-  //   const { current: socket } = socketRef;
-
-  //   try {
-  //     socket.open();
-  //     socket.emit('connection');
-
-  //     socket.on('sendMsg', (data: any) => {
-  //       console.log('data');
-  //       // we get settings data and can do something with it
-  //     });
-  //     socket.on('getMsg', (data: any) => {
-  //       console.log('data');
-  //       // we get settings data and can do something with it
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   // Return a callback to be run before unmount-ing.
-  //   return () => {
-  //     socket.close();
-  //   };
-  // }, []); // Pass in an empty array to only run on mount.
 
   return (
     <Container>

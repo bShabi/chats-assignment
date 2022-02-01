@@ -4,8 +4,7 @@ import { EntryInput } from './EntryInput';
 import { createStyles, makeStyles } from '@mui/styles';
 import MessageView from './MessageView';
 import { ServerToClientEvents, ClientToServerEvents } from '../../App';
-import { io, Socket } from 'socket.io-client';
-
+import { Socket } from 'socket.io-client';
 import { toast, ToastContainer } from 'react-toastify';
 
 export interface IMessage {
@@ -65,7 +64,6 @@ const ChatRoom: React.FC<Props> = ({ socketRef }): JSX.Element => {
   };
   React.useEffect(() => {
     socketRef.on('allMessages', (messages: string[]) => {
-      console.log('all messages', messages);
       setMessages(messages);
       toast.info('New Message');
     });
@@ -76,7 +74,6 @@ const ChatRoom: React.FC<Props> = ({ socketRef }): JSX.Element => {
         <Paper id='style-1' className={classes.messagesBody}>
           {messages.map((message: string, id: number) => {
             return <MessageView key={id} message={message} />;
-            // return <MessageView key={id} message={message} />;
           })}
         </Paper>
         <EntryInput addMessage={addMessage} />

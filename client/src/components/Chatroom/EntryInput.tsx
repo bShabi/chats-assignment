@@ -3,7 +3,6 @@ import TextField from '@mui/material/TextField';
 import { createStyles, makeStyles } from '@mui/styles';
 import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
-import { ILogMessage } from '.';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -16,7 +15,7 @@ const useStyles = makeStyles(() =>
       width: '100%',
     },
     button: {
-      //margin: theme.spacing(1),
+      margin: 5,
     },
   })
 );
@@ -40,6 +39,9 @@ export const EntryInput: React.FC<Props> = ({ addMessage }): JSX.Element => {
           const target = e.target as typeof e.target & {
             message: { value: string };
           };
+          if (!target.message.value) {
+            return;
+          }
           addMessage(target.message.value);
           setMessage('');
         }}>
